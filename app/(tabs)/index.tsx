@@ -1,98 +1,136 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, Image, useWindowDimensions, ScrollView } from 'react-native';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+export default function ProfileScreen() {
+  const { width } = useWindowDimensions();
 
-export default function HomeScreen() {
+  const isDesktop = width >= 1024;
+  const isTablet = width >= 768;
+  const isLandscapeMobile = width >= 667;
+
+  const flexDirection = isLandscapeMobile ? 'row' : 'column';
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
+    <ScrollView style={styles.container}>
+      {/* CONTAINER */}
+      <View style={[
+        styles.card,
+        isDesktop ? { width: 950 } : isTablet ? { width: 700 } : { width: '90%' }
+      ]}>
+        
+        {/* ROW / COLUMN logic */}
+        <View style={[styles.layout, { flexDirection: flexDirection }]}>
+          
+          {/* AVATAR STACK */}
+          <View style={styles.avatarStack}>
+            <Image 
+              source={{ uri: 'https://images.hdqwalls.com/download/ezio-assassins-creed-4k-xq-1920x1080.jpg' }} 
+              style={styles.avatar} 
             />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+          </View>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+          {/* INFO STACK */}
+          <View style={styles.infoStack}>
+            <Text style={[styles.bio, !isLandscapeMobile && { textAlign: 'center' }]}>
+             ¡Mi Perfil!
+            </Text>
+            <Text style={[styles.name, !isLandscapeMobile && { textAlign: 'center' }]}>
+              Cristian Chavez
+            </Text>
+            <Text style={[styles.bio, !isLandscapeMobile && { textAlign: 'center' }]}>
+              Practica 2 - Interfas responsiva utilizando Expo Go y VS Code.
+            </Text>
+            
+            {/* STATS ROW */}
+            <View style={styles.statsRow}>
+              <View style={styles.statItem}>
+                <Text style={styles.statNum}>0</Text>
+                <Text style={styles.statLabel}>Proyectos</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statNum}>0</Text>
+                <Text style={styles.statLabel}>Seguidores</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statNum}>0</Text>
+                <Text style={styles.statLabel}>Seguidos</Text>
+              </View>
+            </View>
+          </View>
+
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
+    backgroundColor: '#f8f9fa',
   },
-  stepContainer: {
-    gap: 8,
+  card: {
+    backgroundColor: '#ffffff',
+    marginTop: 40,
+    marginBottom: 40,
+    padding: 24,
+    borderRadius: 20,
+    alignSelf: 'center',
+    // Sombra para iOS y Android
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  layout: {
+    alignItems: 'center',
+    gap: 20,
+  },
+  avatarStack: {
+    alignItems: 'center',
+  },
+  avatar: {
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    borderWidth: 4,
+    borderColor: '#6366f1',
+  },
+  infoStack: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  name: {
+    fontSize: 28,
+    fontWeight: '800',
+    color: '#1f2937',
     marginBottom: 8,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  bio: {
+    fontSize: 16,
+    color: '#6b7280',
+    lineHeight: 22,
+    marginBottom: 20,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: '#f3f4f6',
+    borderRadius: 12,
+    padding: 15,
+  },
+  statItem: {
+    alignItems: 'center',
+  },
+  statNum: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#4f46e5',
+  },
+  statLabel: {
+    fontSize: 12,
+    color: '#9ca3af',
+    textTransform: 'uppercase',
   },
 });
